@@ -1,0 +1,14 @@
+services:
+  music-assistant-mcp:
+    build: .
+    container_name: music-assistant-mcp
+    environment:
+      - MA_URL=${MA_URL:-http://host.docker.internal:8095}
+      - MA_TOKEN=${MA_TOKEN:-}
+    # Uncomment below to expose via HTTP transport instead of stdio
+    # command: ["fastmcp", "run", "server.py:mcp", "--transport", "http", "--host", "0.0.0.0", "--port", "8000"]
+    # ports:
+    #   - "8000:8000"
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
