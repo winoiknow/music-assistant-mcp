@@ -10,11 +10,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY server.py .
 
-# Environment variables — override at runtime
+# Environment variables  ^`^t override at runtime
 ENV MA_URL="http://localhost:8095"
 ENV MA_TOKEN=""
 
 # Default: run with stdio transport (for MCP clients)
-# Override CMD to use http transport: ["python", "server.py"]
-# or with fastmcp: ["fastmcp", "run", "server.py:mcp", "--transport", "http", "--port", "8000"]
-ENTRYPOINT ["python", "server.py"]
+# Override with docker-compose command or docker run args for HTTP transport
+CMD ["python", "server.py"]

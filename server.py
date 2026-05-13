@@ -29,21 +29,9 @@ mcp = FastMCP(
 
 # ---------------------------------------------------------------------------
 # Helpers
-# ---------------------------------------------------------------------------
-_msg_counter = 0
-
-
 async def _call_ma(command: str, args: dict[str, Any] | None = None) -> Any:
     """Send a command to the Music Assistant JSON API and return the result."""
-    global _msg_counter
-    _msg_counter += 1
-
-    payload: dict[str, Any] = {
-        "message_id": str(_msg_counter),
-        "command": command,
-    }
-    if args:
-        payload["args"] = args
+    payload: dict[str, Any] = {"command": command, "args": args or {}}
 
     headers: dict[str, str] = {"Content-Type": "application/json"}
     if MA_TOKEN:
@@ -54,7 +42,7 @@ async def _call_ma(command: str, args: dict[str, Any] | None = None) -> Any:
         resp.raise_for_status()
         data = resp.json()
 
-    # The MA API wraps results; return the inner result when present
+    # The MA API may wrap results; return the inner result when present
     if isinstance(data, dict):
         if "error" in data:
             raise RuntimeError(f"Music Assistant error: {data['error']}")
